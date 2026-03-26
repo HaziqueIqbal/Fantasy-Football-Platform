@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+mediafiles/
+
+# Environment variables - NEVER commit .env
+.env
+.envs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.tox/
+nosetests.xml
+
+# Jupyter
+.ipynb_checkpoints
+
+# Docker
+*.pid
+
+# Compiled translations
+*.mo
+
+# Distribution / packaging
+.eggs/
+*.egg
+MANIFEST
