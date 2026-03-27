@@ -54,17 +54,16 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 AUTH_USER_MODEL = "user.User"
 
 DEFAULT_MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.security.SecurityMiddleware",
 ]
 
-THIRD_PARTY_MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
-]
+THIRD_PARTY_MIDDLEWARE = []
 
 ROOT_URLCONF = "config.urls"
 
@@ -173,7 +172,7 @@ SPECTACULAR_SETTINGS = {
 CORS_URLS_REGEX = r"^/api/.*$"
 
 # -------------------------------------------------------------------
-# Fantasy Football domain constants
+# Fantasy Football Constants
 # -------------------------------------------------------------------
 TEAM_INITIAL_BUDGET = 5_000_000
 PLAYER_INITIAL_VALUE = 1_000_000

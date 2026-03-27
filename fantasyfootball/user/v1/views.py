@@ -161,10 +161,14 @@ class TokenRefreshView(APIView):
             )
 
         try:
-            refresh = RefreshToken(refresh_token)
+            old_refresh = RefreshToken(refresh_token)
+            old_refresh.blacklist()
+            old_refresh.set_jti()
+            old_refresh.set_exp()
+            old_refresh.set_iat()
             data = {
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
+                "access": str(old_refresh.access_token),
+                "refresh": str(old_refresh),
             }
         except TokenError:
             return format_response(

@@ -14,10 +14,5 @@ def create_team_for_new_user(sender, instance, created, **kwargs):
     if created:
         from fantasyfootball.team.services import TeamService
 
-        try:
-            TeamService.create_team_for_user(instance)
-            logger.info("Team created for user %s", instance.email)
-        except Exception as exc:
-            logger.error(
-                "Failed to create team for user %s: %s", instance.email, exc
-            )
+        TeamService.create_team_for_user(instance)
+        logger.info("Team created for user %s", instance.email)

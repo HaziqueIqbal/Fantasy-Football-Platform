@@ -460,7 +460,7 @@ Every API response follows a consistent structure:
 ```json
 {
   "status_code": 200,
-  "message": "Human-readable message",
+  "message": "message",
   "data": { ... },
   "success": true
 }

@@ -1,5 +1,5 @@
 from .base import *  # noqa: F401, F403
-from .base import DEFAULT_MIDDLEWARE, THIRD_PARTY_MIDDLEWARE, env
+from .base import DEFAULT_MIDDLEWARE, env
 
 DEBUG = True
 
@@ -7,11 +7,12 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-LOCAL_MIDDLEWARE = [
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-]
-
-MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE + LOCAL_MIDDLEWARE
+# WhiteNoise must sit immediately after SecurityMiddleware (index 0).
+MIDDLEWARE = (
+    DEFAULT_MIDDLEWARE[:1]
+    + ["whitenoise.middleware.WhiteNoiseMiddleware"]
+    + DEFAULT_MIDDLEWARE[1:]
+)
 
 STORAGES = {
     "staticfiles": {

@@ -7,10 +7,10 @@ from fantasyfootball.common.mixins import BaseModel
 class TransferListing(BaseModel):
     """A player listed on the transfer market."""
 
-    player = models.OneToOneField(
+    player = models.ForeignKey(
         "player.Player",
         on_delete=models.CASCADE,
-        related_name="transfer_listing",
+        related_name="transfer_listings",
         db_index=True,
     )
     seller = models.ForeignKey(

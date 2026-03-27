@@ -46,7 +46,7 @@ class TeamService:
         """
         distribution = settings.PLAYER_DISTRIBUTION
         initial_budget = Decimal(str(settings.TEAM_INITIAL_BUDGET))
-        initial_player_value = Decimal(str(settings.PLAYER_VALUE_INITIAL if hasattr(settings, 'PLAYER_VALUE_INITIAL') else settings.PLAYER_INITIAL_VALUE))
+        initial_player_value = Decimal(str(settings.PLAYER_INITIAL_VALUE))
 
         team_name = f"{user.first_name} {user.last_name}'s FC"
         counter = 1

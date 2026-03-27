@@ -21,7 +21,7 @@ class TransferListingCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "You can only list players from your own team."
             )
-        if hasattr(player, "transfer_listing") and player.transfer_listing.is_active:
+        if player.transfer_listings.filter(is_active=True).exists():
             raise serializers.ValidationError(
                 "This player is already listed on the transfer market."
             )

@@ -1,5 +1,5 @@
 from .base import *  # noqa: F401, F403
-from .base import DEFAULT_MIDDLEWARE, THIRD_PARTY_MIDDLEWARE
+from .base import DEFAULT_MIDDLEWARE
 
 DEBUG = True
 
@@ -7,7 +7,7 @@ ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-MIDDLEWARE = DEFAULT_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
+MIDDLEWARE = DEFAULT_MIDDLEWARE
 
 DATABASES = {
     "default": {
@@ -22,4 +22,7 @@ PASSWORD_HASHERS = [
 
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.InMemoryStorage"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.InMemoryStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
