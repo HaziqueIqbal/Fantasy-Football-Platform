@@ -1,5 +1,6 @@
 import logging
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -19,6 +20,18 @@ class TransactionListView(ListAPIView):
     filterset_class = TransactionFilter
     ordering_fields = ["transfer_amount", "created_at"]
     ordering = ["-created_at"]
+
+    @extend_schema(
+        tags=["Transaction"],
+        summary="List all transactions",
+        description=(
+            "Returns a paginated, filterable history of all completed player transfers. "
+            "Filter by buyer, seller, from_team, to_team, min_amount, or max_amount. "
+            "Order by transfer_amount or created_at."
+        ),
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         return Transaction.objects.select_related(
@@ -41,6 +54,14 @@ class TransactionDetailView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TransactionSerializer
     lookup_field = "pk"
+
+    @extend_schema(
+        tags=["Transaction"],
+        summary="Get transaction by ID",
+        description="Returns the full details of a single completed transfer transaction by its UUID.",
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         return Transaction.objects.select_related(

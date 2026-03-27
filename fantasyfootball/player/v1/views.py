@@ -1,5 +1,6 @@
 import logging
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -21,6 +22,19 @@ class PlayerListView(ListAPIView):
     ordering_fields = ["value", "position", "last_name", "created_at"]
     ordering = ["position", "last_name"]
 
+    @extend_schema(
+        tags=["Player"],
+        summary="List all players",
+        description=(
+            "Returns a paginated list of all players across all teams. "
+            "Filter by position, country, team, min_value, max_value, first_name, or last_name. "
+            "Search across first_name, last_name, and country. "
+            "Order by value, position, last_name, or created_at."
+        ),
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         return Player.objects.select_related("team").all()
 
@@ -41,6 +55,14 @@ class PlayerDetailView(RetrieveAPIView):
     serializer_class = PlayerSerializer
     queryset = Player.objects.select_related("team").all()
     lookup_field = "pk"
+
+    @extend_schema(
+        tags=["Player"],
+        summary="Get player by ID",
+        description="Returns the full details of a single player by their UUID, including their current team and value.",
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

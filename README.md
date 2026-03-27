@@ -67,12 +67,12 @@ User (1) ──────── (1) Team
                         │
                         │  (many)
                         ▼
-                     Player ◄────── (1) TransferListing ◄──── (1) Transaction
-                                                                       │
-                                          User (seller) ──────────────►│
-                                          User (buyer)  ──────────────►│
-                                          Team (from)   ──────────────►│
-                                          Team (to)     ──────────────►│
+                     Player ◄────── (many) TransferListing ◄──── (1) Transaction
+                                                                         │
+                                            User (seller) ──────────────►│
+                                            User (buyer)  ──────────────►│
+                                            Team (from)   ──────────────►│
+                                            Team (to)     ──────────────►│
 ```
 
 ### Entity Descriptions
@@ -82,7 +82,7 @@ User (1) ──────── (1) Team
 | **User** | `id` (UUID), `email` (unique), `first_name`, `last_name` | Custom user model; email is the login credential |
 | **Team** | `id` (UUID), `name`, `owner` (FK→User), `budget` (Decimal) | One team per user; budget starts at $5,000,000 |
 | **Player** | `id` (UUID), `first_name`, `last_name`, `position`, `value`, `team` (FK→Team) | Position: goalkeeper/defender/midfielder/attacker; value starts at $1,000,000 |
-| **TransferListing** | `id` (UUID), `player` (OneToOne→Player), `seller` (FK→User), `asking_price`, `is_active` | `is_active=False` after sale or removal; cannot be deleted once completed |
+| **TransferListing** | `id` (UUID), `player` (FK→Player), `seller` (FK→User), `asking_price`, `is_active` | `is_active=False` after sale or removal; a player may have multiple listings over time (one active at most) |
 | **Transaction** | `id` (UUID), `player`, `from_team`, `to_team`, `seller`, `buyer`, `transfer_amount`, `transfer_listing` | Immutable record; `delete()` raises `NotImplementedError` |
 
 ### Constraints
@@ -427,6 +427,7 @@ Django Admin is available at `http://localhost:8000/admin/`.
 ### Authentication
 - **JWT (SimpleJWT, HS256)** with access + refresh token rotation.
 - Tokens are accepted via the `Authorization: Bearer <token>` header **or** an `access` cookie (cookie-based auth common in browser apps).
+- Refresh tokens are **rotated on every `/token/refresh/` call** — the old token is blacklisted and a new one is issued.
 - Refresh tokens are **blacklisted on logout** to prevent reuse.
 
 ### Signals
@@ -452,7 +453,7 @@ All 6 steps happen atomically — no partial updates.
 - `select_related` / `prefetch_related` on all list views to avoid N+1 queries.
 - Database indexes on frequently filtered fields: `position`, `team`, `value`, `is_active`, `buyer/seller`.
 - `bulk_create` in `TeamService` to create all 20 players in a single SQL statement.
-- `LimitOffsetPagination` with configurable `page_size` (default 15, max 100).
+- `PageNumberPagination` with configurable `page_size` (default 15, max 100).
 
 ### Response Envelope
 Every API response follows a consistent structure:
