@@ -36,3 +36,4 @@ services:
 
 volumes:
   postgres_data:
+    name: fantasyfootball_postgres_data
